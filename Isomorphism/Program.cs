@@ -10,6 +10,9 @@ namespace Isomorphism
     {
         static void Main(string[] args)
         {
+            int[,] tab = new int[,] { { 0, 1 }, { 1, 0 } };
+
+            Graph G = new Graph(tab);         
         }
     }
 }
