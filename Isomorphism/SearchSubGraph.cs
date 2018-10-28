@@ -83,10 +83,5 @@ namespace Isomorphism
         {
             return new Graph(0);
         }
-
-        private bool Izomorfizm(Graph G, Graph H)
-        {
-            return true; /// Zaślepka
-        }
     }
 }

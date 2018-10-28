@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Isomorphism
 {
-    class Graph
+    public class Graph
     {
         public Vertex[] Vertices { get; private set; }
         public List<Edge> Edges { get; private set; }

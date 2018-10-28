@@ -2,7 +2,7 @@
 
 namespace Isomorphism
 {
-    internal class Vertex
+    public class Vertex
     {
         public int Index { get; private set; }
         public int Degree { get; private set; }

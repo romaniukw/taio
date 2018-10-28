@@ -21,6 +21,25 @@ namespace Isomorphism
             else
                 subGraph = new SearchSubGraph(H, G);
 
+            //int[,] isofirst = new int[,] { { 0, 0, 1, 0, 0, 0, 0 },
+            //                               { 0, 0, 1, 0, 0, 0, 0 },
+            //                               { 1, 1, 0, 1, 0, 0, 0 },
+            //                               { 0, 0, 1, 0, 1, 0, 1 },
+            //                               { 0, 0, 0, 1, 0, 1, 0 },
+            //                               { 0, 0, 0, 0, 1, 0, 0 },
+            //                               { 0, 0, 0, 1, 0, 0, 0 } };
+            //int[,] isosecond = new int[,] { { 0, 1, 0, 0, 0, 0, 0 }, 
+            //                                 { 1, 0, 0, 0, 0, 1, 0 }, 
+            //                                 { 0, 0, 0, 0, 0, 1, 0 }, 
+            //                                 { 0, 0, 0, 0, 0, 0, 1 }, 
+            //                                 { 0, 0, 0, 0, 0, 0, 1 }, 
+            //                                 { 0, 1, 1, 0, 0, 0, 1 }, 
+            //                                 { 0, 0, 0, 1, 1, 1, 0 } };
+
+            //Graph G = new Graph(fullGraph);
+            //Graph first = new Graph(isofirst);
+            //Graph second = new Graph(isosecond);
+            //bool t = FullIsomorphismChecker.AreTheyIsomorphic(first, second);
         }
     }
 }

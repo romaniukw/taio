@@ -1,6 +1,6 @@
 ﻿namespace Isomorphism
 {
-    internal class Edge
+    public class Edge
     {
         public int From { get; private set; }
         public int To { get; private set; }
