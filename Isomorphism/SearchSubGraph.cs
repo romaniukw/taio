@@ -27,7 +27,9 @@ namespace Isomorphism
                 for (int j = i + 1; j < G.Vertices.Length; j++)
                     if (G.Edges.Contains(new Edge(i, j)))
                     {
-                        Graph subGraph = new Graph(tab);
+                        List<int> verticesSubGraph = new List<int>();
+                        verticesSubGraph.Add(i);
+                        verticesSubGraph.Add(j);
                         foreach (var e in G.Vertices[i].Neighbors)
                         {
                             if (e.Index > j && e.Index > i)
@@ -59,22 +61,27 @@ namespace Isomorphism
                                 }
                             }
                         }
-                        searchSubGraph(subGraph, commonVertices, indexCommonVertices);
+                        searchSubGraph(verticesSubGraph, commonVertices, indexCommonVertices);
                     }
         }
 
-        private void searchSubGraph(Graph subGraph, int[,] commonVertices, int indexCommonVertices) // Uzupełnić typ
+        private void searchSubGraph(List<int> verticesSubGraph, int[,] commonVertices, int indexCommonVertices) // Uzupełnić typ
         {
             int[,] tmpCommonVertices = new int[commonVertices.Length,2];
             for(int i=0; i<commonVertices.Length; i++)
                 for(int j=0; j<2; j++)
                     tmpCommonVertices[i, j] = commonVertices[i, j];
             int tmpIndexCommonVertices = indexCommonVertices;
-            Graph tmpSubGraph = subGraph.Clone();
             for(int i=0; i<indexCommonVertices; i++)
             {
-
+                verticesSubGraph.Add(commonVertices[i, 0]);
+                // Sprawdzanie izomorfizmu teraz
             }
+        }
+
+        private Graph createGraph(List<int> verticesSubGraph)
+        {
+            return new Graph(0);
         }
 
         private bool Izomorfizm(Graph G, Graph H)
