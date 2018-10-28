@@ -11,8 +11,9 @@ namespace Isomorphism
         static void Main(string[] args)
         {
             int[,] tab = new int[,] { { 0, 1 }, { 1, 0 } };
+            int[,] fullGraph = new int[,] { { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 }, { 1, 1, 1, 1, 1 } };
 
-            Graph G = new Graph(tab);         
+            Graph G = new Graph(fullGraph);         
         }
     }
 }

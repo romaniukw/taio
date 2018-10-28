@@ -19,7 +19,7 @@ namespace Isomorphism
         }
         private void CreateVertices()
         {
-            for (int i = 0; i < Vertices.Length; i++) Vertices[i] = new Vertex();
+            for (int i = 0; i < Vertices.Length; i++) Vertices[i] = new Vertex(i);
         }
         public Graph(int[,] matrix)
         {
@@ -42,8 +42,8 @@ namespace Isomorphism
         public void CreateAndAddEdge(int from, int to)
         {
             Edge e = new Edge(from, to);
-            Vertices[from].AddEdge(e);
-            Vertices[to].AddEdge(e);
+            Vertices[from].AddNeighbor(Vertices[to]);
+            Vertices[to].AddNeighbor(Vertices[from]);
             Edges.Add(e);
         }
         public void AddEdge(Edge e)

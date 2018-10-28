@@ -4,18 +4,20 @@ namespace Isomorphism
 {
     internal class Vertex
     {
+        public int Index { get; private set; }
         public int Degree { get; private set; }
-        public List<Edge> Edges { get; private set; }
+        public List<Vertex> Neighbors { get; private set; }
 
-        public Vertex()
+        public Vertex(int i)
         {
             Degree = 0;
-            Edges = new List<Edge>();
+            Neighbors = new List<Vertex>();
+            Index = i;
         }
-        public void AddEdge(Edge e)
+        public void AddNeighbor(Vertex e)
         {
             Degree++;
-            Edges.Add(e);
+            Neighbors.Add(e);
         }
     }
 }
