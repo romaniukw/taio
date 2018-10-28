@@ -1,6 +1,0 @@
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\bin\Debug\Isomorphism.exe.config
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\bin\Debug\Isomorphism.exe
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\bin\Debug\Isomorphism.pdb
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\obj\Debug\Isomorphism.csprojResolveAssemblyReference.cache
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\obj\Debug\Isomorphism.exe
-C:\Users\veron\Desktop\Taio\taio\Isomorphism\obj\Debug\Isomorphism.pdb
