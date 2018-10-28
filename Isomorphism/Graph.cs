@@ -50,5 +50,16 @@ namespace Isomorphism
         {
             Edges.Add(e);
         }
+        public Graph Clone()
+        {
+            Graph H = new Graph(this.Vertices.Length);
+            foreach( var e in this.Edges)
+            {
+                H.Vertices[e.From].AddNeighbor(Vertices[e.To]);
+                H.Vertices[e.To].AddNeighbor(Vertices[e.From]);
+                H.AddEdge(e);
+            }
+            return H;
+        }
     }
 }
