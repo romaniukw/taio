@@ -61,5 +61,30 @@ namespace Isomorphism
             }
             return H;
         }
+
+        public Graph(List<int> verticesSubGraph, Graph G)
+        {
+            int[,] matrix = new int[verticesSubGraph.Count, verticesSubGraph.Count];
+            verticesSubGraph.Sort();
+            for (int i = 0; i < verticesSubGraph.Count - 1; i++)
+            {
+                for (int j = i + 1; j < verticesSubGraph.Count; j++)
+                {
+                    foreach (var e in G.Edges)
+                    {
+                        if (e.From == i && e.To == j)
+                        {
+                            matrix[i, j] = 1;
+                            matrix[j, i] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+            Vertices = new Vertex[matrix.GetLength(0)];
+            Edges = new List<Edge>();
+            CreateVertices();
+            this.GenerateGraphFromMatrix(matrix);
+        }
     }
 }
