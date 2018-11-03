@@ -21,6 +21,8 @@ namespace Isomorphism
             else
                 subGraph = new SearchSubGraph(H, G);
 
+            Console.WriteLine(subGraph.SubGraph.Vertices.Length);
+
             //int[,] isofirst = new int[,] { { 0, 0, 1, 0, 0, 0, 0 },
             //                               { 0, 0, 1, 0, 0, 0, 0 },
             //                               { 1, 1, 0, 1, 0, 0, 0 },
