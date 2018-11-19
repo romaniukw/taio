@@ -51,17 +51,6 @@ namespace Isomorphism
                 sw.Stop();
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Algorytm dokładny: ");
-                
-                foreach(var cos in subGraph.VerticesFromGraphG)
-                {
-                    Console.Write(cos+" ");
-                }
-                Console.WriteLine();
-                foreach (var cos in subGraph.VerticesFromGraphH)
-                {
-                    Console.Write(cos + " ");
-                }
-                Console.WriteLine();
                 ShowMapping(map, sw.ElapsedTicks);
 
             }
