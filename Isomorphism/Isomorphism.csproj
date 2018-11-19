@@ -42,13 +42,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleFullCheckerApp.cs" />
+    <Compile Include="CreateExampleGraphs.cs" />
     <Compile Include="Edge.cs" />
+    <Compile Include="FindGraphByApproximationAlgorithm.cs" />
     <Compile Include="Graph.cs" />
     <Compile Include="FullIsomorphismChecker.cs" />
+    <Compile Include="MappingGeneratorAndChecker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadGraphsFromFile.cs" />
     <Compile Include="SearchSubGraph.cs" />
+    <Compile Include="SubGraph.cs" />
     <Compile Include="Vertex.cs" />
   </ItemGroup>
   <ItemGroup>

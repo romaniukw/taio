@@ -9,26 +9,30 @@ namespace Isomorphism
 {
     class SearchSubGraph
     {
-        public Graph G {get; private set; }
+        public Graph G { get; private set; }
         public Graph H { get; private set; }
-        public Graph SubGraph { get; private set; }
-        public Graph TmpSubGraph { get; private set; }
+        public List<int> VerticesFromGraphG { get; private set; } // Lista wierzchołków z pierwszego grafu
+        public List<int> VerticesFromGraphH { get; private set; } // Lista wierzchołków z drugiego grafu
 
         public SearchSubGraph(Graph g1, Graph g2)
         {
             G = g1;
             H = g2;
-            SubGraph = createGraphTwoVertices();
-            TmpSubGraph = new Graph(0);
+            VerticesFromGraphG = new List<int>();
+            VerticesFromGraphH = new List<int>();
+            createGraphTwoVertices();
         }
 
-        private Graph createGraphTwoVertices() //Uzupełnić typ
+        private void createGraphTwoVertices() //Uzupełnić typ
         {
-            int[,] commonVertices = new int[G.Vertices.Length, 2];
-            int indexCommonVertices = 0;
+            List<int> verticesSubGraphH = new List<int>();
+            verticesSubGraphH.Add(H.Edges[0].From);
+            verticesSubGraphH.Add(H.Edges[0].To);
+            List<int> commonVertices = new List<int>();
             Graph subGraph = new Graph(0);
             int[,] tab = new int[,] { { 0, 1 }, { 1, 0 } };
             for (int i = 0; i < G.Vertices.Length; i++)
+            {
                 for (int j = i + 1; j < G.Vertices.Length; j++)
                 {
                     if (G.Edges.Select(x => x).Where(x => x.From == i && x.To == j).Any())
@@ -40,119 +44,126 @@ namespace Isomorphism
                         {
                             if (e.Index > j && e.Index > i)
                             {
-                                commonVertices[indexCommonVertices, 0] = e.Index;
-                                commonVertices[indexCommonVertices, 1] = 1;
-                                indexCommonVertices++;
+                                commonVertices.Add(e.Index);
                             }
                         }
                         foreach (var e in G.Vertices[j].Neighbors)
                         {
-                            if (e.Index > i && e.Index > j)
+                            if (e.Index > i && e.Index > j && !commonVertices.Contains(e.Index))
                             {
-                                bool existInCommonVertices = false;
-                                for (int k = 0; k < indexCommonVertices; k++)
-                                {
-                                    if (commonVertices[k, 0] == e.Index)
-                                    {
-                                        commonVertices[k, 1]++;
-                                        existInCommonVertices = true;
-                                    }
-                                }
-                                if (!existInCommonVertices)
-                                {
-                                    commonVertices[indexCommonVertices, 0] = e.Index;
-                                    commonVertices[indexCommonVertices, 1] = 1;
-                                    indexCommonVertices++;
-                                }
+                                commonVertices.Add(e.Index);
                             }
                         }
-                        Graph tempSubGraph = searchSubGraph(verticesSubGraph, commonVertices, indexCommonVertices);
-                        if (tempSubGraph.Vertices.Length > subGraph.Vertices.Length)
-                            subGraph = tempSubGraph.Clone();
+                        if (commonVertices.Count > 0)
+                        {
+                            Console.WriteLine("Zaczyna się " + i + " " + j);
+                            searchSubGraph(verticesSubGraph, commonVertices, verticesSubGraphH);
+                        }
                     }
-                    commonVertices = new int[G.Vertices.Length, 2];
-                    indexCommonVertices = 0;
+                    commonVertices = new List<int>();
                 }
-            return subGraph;
+            }
         }
 
-        private Graph searchSubGraph(List<int> verticesSubGraph, int[,] commonVertices, int indexCommonVertices) // Uzupełnić typ
+        private void searchSubGraph(List<int> verticesSubGraph, List<int> commonVertices, List<int> verticesSubGraphH) // Uzupełnić typ
         {
-            int[,] tmpCommonVertices = new int[commonVertices.Length,2];
+            List<int> tmpCommonVertices = new List<int>();
             Graph tmpGraph = createGraph(verticesSubGraph);
-            for (int i = 0; i < indexCommonVertices; i++)
-                for (int j = 0; j < 2; j++)
-                {
-                    tmpCommonVertices[i, j] = commonVertices[i, j];
-                }
-            int tmpIndexCommonVertices = indexCommonVertices;
+            foreach (var e in commonVertices)
+                tmpCommonVertices.Add(e);
             //Rekurencyjne tworzenie wszystkich pod grafów
-            List<List<int>> allSubGraphList = createAllSubGraphContainsNVertices(verticesSubGraph.Count);
-            for (int i=0; i<indexCommonVertices; i++)
+            List<List<int>> allSubGraphList = createAllSubGraphContainsNVertices(verticesSubGraph.Count + 1, new List<List<int>>(), 0, 0, new List<int>());
+            foreach (var p in verticesSubGraph)
+                Console.Write(p + " ");
+            Console.WriteLine();
+            foreach (var p in commonVertices)
+                Console.Write(p + " ");
+            Console.WriteLine();
+            for (int i = 0; i < commonVertices.Count; i++)
             {
-                verticesSubGraph.Add(commonVertices[i, 0]);
+                var tmpVertic = commonVertices[i];
+                verticesSubGraph.Add(tmpVertic);
+                tmpCommonVertices.Remove(tmpVertic);
+
                 // Sprawdzanie izomorfizmu teraz
                 foreach (var verti in allSubGraphList)
                 {
-                    if(FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraph(verti)))
+                    if (FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraph(verti)))
                     {
-                        // Tutaj tworzymy listę sąsiadów, trzeba usunąć wierzchołek który został dodany
                         foreach (var e in G.Vertices[i].Neighbors)
                         {
                             verticesSubGraph.Sort();
-                            if (e.Index > verticesSubGraph.Last() )
+                            if (e.Index > verticesSubGraph.Last() && !commonVertices.Contains(e.Index))
                             {
-                                bool existInCommonVertices = false;
-                                for (int k = 0; k < indexCommonVertices; k++)
-                                {
-                                    if (tmpCommonVertices[k, 0] == e.Index)
-                                    {
-                                        tmpCommonVertices[k, 1]++;
-                                        existInCommonVertices = true;
-                                    }
-                                }
-                                if (!existInCommonVertices)
-                                {
-                                    tmpCommonVertices[indexCommonVertices, 0] = e.Index;
-                                    tmpCommonVertices[indexCommonVertices, 1] = 1;
-                                    indexCommonVertices++;
-                                }
+                                tmpCommonVertices.Add(e.Index);
                             }
                         }
-                        searchSubGraph(verticesSubGraph, tmpCommonVertices, tmpIndexCommonVertices);
+                        searchSubGraph(verticesSubGraph, tmpCommonVertices, verti);
                     }
                     else
                     {
-                        if (TmpSubGraph.Vertices.Length < tmpGraph.Vertices.Length)
-                            TmpSubGraph = tmpGraph.Clone();
-                    }
-                    for (int j = 0; j < indexCommonVertices; j++)
-                        for (int k = 0; k < 2; k++)
+                        if (VerticesFromGraphG.Count < tmpGraph.Vertices.Length)
                         {
-                            tmpCommonVertices[j, k] = commonVertices[j, k];
+                            VerticesFromGraphG = new List<int>();
+                            foreach (var p in verticesSubGraph)
+                                VerticesFromGraphG.Add(p);
+                            VerticesFromGraphG.Remove(tmpVertic);
+                            VerticesFromGraphH = new List<int>();
+                            foreach (var p in verticesSubGraphH)
+                                VerticesFromGraphH.Add(p);
                         }
+                    }
+                    tmpCommonVertices = new List<int>();
+                    foreach (var e in commonVertices)
+                        tmpCommonVertices.Add(e);
+                    tmpCommonVertices.Remove(tmpVertic);
                 }
-                verticesSubGraph.Remove(commonVertices[i, 0]);
+                verticesSubGraph.Remove(tmpVertic);
+                tmpCommonVertices.Add(tmpVertic);
             }
-            return new Graph(0);
-        }
-  
-        private List<List<int>> createAllSubGraphContainsNVertices(int n)
-        {
-            return new List<List<int>>();
+            if (commonVertices.Count == 0)
+                if (VerticesFromGraphG.Count < tmpGraph.Vertices.Length)
+                {
+                    VerticesFromGraphG = new List<int>();
+                    foreach (var p in verticesSubGraph)
+                        VerticesFromGraphG.Add(p);
+                    VerticesFromGraphH = new List<int>();
+                    foreach (var p in verticesSubGraphH)
+                        VerticesFromGraphH.Add(p);
+                }
         }
 
+        private List<List<int>> createAllSubGraphContainsNVertices(int n, List<List<int>> list, int howMuchNumberAllredyHave, int index, List<int> actualList)
+        {
+            if (howMuchNumberAllredyHave == n)
+            {
+                List<int> tmpList = new List<int>();
+                foreach (var e in actualList)
+                    tmpList.Add(e);
+                list.Add(tmpList);
+                return list;
+            }
+            for (int i = index; i < H.Vertices.Length; i++)
+            {
+                howMuchNumberAllredyHave++;
+                actualList.Add(i);
+                list = createAllSubGraphContainsNVertices(n, list, howMuchNumberAllredyHave, i + 1, actualList);
+                actualList.Remove(i);
+                howMuchNumberAllredyHave--;
+            }
+            return list;
+        }
         public Graph createGraph(List<int> verticesSubGraph)
         {
             int[,] matrix = new int[verticesSubGraph.Count, verticesSubGraph.Count];
             verticesSubGraph.Sort();
-            for(int i=0; i<verticesSubGraph.Count - 1; i++)
+            for (int i = 0; i < verticesSubGraph.Count - 1; i++)
             {
-                for(int j=i+1; j<verticesSubGraph.Count; j++)
+                for (int j = i + 1; j < verticesSubGraph.Count; j++)
                 {
-                    foreach(var e in G.Edges)
+                    foreach (var e in G.Edges)
                     {
-                        if(e.From == i && e.To == j)
+                        if (e.From == verticesSubGraph[i] && e.To == verticesSubGraph[j])
                         {
                             matrix[i, j] = 1;
                             matrix[j, i] = 1;
