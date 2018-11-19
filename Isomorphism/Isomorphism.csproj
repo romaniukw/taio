@@ -51,7 +51,6 @@
     <Compile Include="MappingGeneratorAndChecker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadGraphsFromFile.cs" />
     <Compile Include="SearchSubGraph.cs" />
     <Compile Include="SubGraph.cs" />
     <Compile Include="Vertex.cs" />

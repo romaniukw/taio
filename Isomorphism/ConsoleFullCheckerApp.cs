@@ -11,41 +11,102 @@ namespace Isomorphism
     {
         public static void RunApp()
         {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("---------------------------------------------------------------------------------------------------------");
             Console.WriteLine("Co chcesz zrobić?");
-            Console.WriteLine("Uruchom wszystkie: Wybierz 0");
-           // Console.WriteLine("Uruchom jeden: Wybierz 1-10");
+            Console.WriteLine("Przetestuj algorytm dokładny: Wybierz D");
+            Console.WriteLine("Przetestuj algorytm aproksymacyjny: Wybierz A");
+            Console.WriteLine("Porównaj oba algorytmy dla tych samych grafów: Wybierz P");
             Console.WriteLine("Wyłącz: Wybierz X");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
             var t = Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.White;
             switch (t)
             {
-                case "0":
-                    RunAll();
+                case "D":
+                    RunWithFile(1);
+                    break;
+                case "A":
+                    RunWithFile(2);
+                    break;
+                case "P":
+                    RunWithFile(3);
                     break;
                 case "x":
                     return;
             }
             RunApp();
         }
-
-        public static void RunAll()
+   
+        public static void RunWithFile(int i)
         {
-            for (int i = 1; i <= 10; i++)
+            Graph G = GetGraph("G");
+            Graph H = GetGraph("H");
+            Stopwatch sw = new Stopwatch();
+            if(i==1 || i==3)
             {
-                RunOne(i);
+                sw.Start();
+                SearchSubGraph subGraph = new SearchSubGraph(G, H);
+               var map = subGraph.BestMapping;
+                sw.Stop();
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("Algorytm dokładny: ");
+                
+                foreach(var cos in subGraph.VerticesFromGraphG)
+                {
+                    Console.Write(cos+" ");
+                }
+                Console.WriteLine();
+                foreach (var cos in subGraph.VerticesFromGraphH)
+                {
+                    Console.Write(cos + " ");
+                }
+                Console.WriteLine();
+                ShowMapping(map, sw.ElapsedTicks);
+
+            }
+            sw.Reset();
+            if(i==2 ||i==3)
+            {
+                sw.Start();
+                var map = FindGraphByApproximationAlgorithm.Search(G, H);
+                sw.Stop();
+                Console.WriteLine("Algorytm aproksymacyjny: ");
+                ShowMapping(map, sw.ElapsedTicks);
             }
         }
-        public static void RunOne(int index)
+
+        public static void ShowMapping(List<int[]> mapp, long Ticks)
         {
-            Stopwatch sw = new Stopwatch();
-            Console.WriteLine($"Test {index}: ");
-            Graph G = CreateExampleGraphs.CreateFromFile($"../../Data/example{index}a.txt");
-            Graph H = CreateExampleGraphs.CreateFromFile($"../../Data/example{index}a.txt");
-            sw.Start();
-            List<int[]> mapping;
-            FullIsomorphismChecker.AreTheyIsomorphic(G, H, out mapping);//tu sprawdzać całość
-            sw.Stop();
-            Console.Write($"{sw.ElapsedTicks}");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            for (int j = 0; j < mapp[0].Length; j++)
+            {
+                Console.Write($"{mapp[0][j]}->{mapp[1][j]}  ");
+            }
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine($"  {Ticks}");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine();
+        }
+
+        public static Graph GetGraph(string name)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Wprowadź ścieżkę do grafu {name}:");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            string path = Console.ReadLine();
+
+            try
+            {
+                return CreateExampleGraphs.CreateFromCSVFile(path);
+            }
+            catch
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Błędna ścieżka lub plik");
+                Console.ForegroundColor = ConsoleColor.White;
+                return GetGraph(name);
+            }
         }
     }
 }
