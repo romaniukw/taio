@@ -24,13 +24,13 @@ namespace Isomorphism
             }
             else
             {
-                H = g1;
                 G = g2;
+                H = g1;
             }
             VerticesFromGraphG = new List<int>();
             VerticesFromGraphH = new List<int>();
             createGraphTwoVertices();
-            if (g2.Vertices.Length < g1.Vertices.Length)
+            /*if (g2.Vertices.Length < g1.Vertices.Length)
             {
                 int[] tmpTable0 = new int[BestMapping[0].Length];
                 int[] tmpTable1 = new int[BestMapping[1].Length];
@@ -41,7 +41,53 @@ namespace Isomorphism
                 BestMapping = new List<int[]>();
                 BestMapping.Add(tmpTable0);
                 BestMapping.Add(tmpTable1);
+            }*/
+            List<int[]> tmpMap;
+            if (g1.Vertices.Length <= g2.Vertices.Length)
+            {
+                FullIsomorphismChecker.AreTheyIsomorphic(createGraph(VerticesFromGraphG), createGraphH(VerticesFromGraphH), out tmpMap);
+                int[] tmpTable0 = new int[tmpMap[0].Length];
+                int[] tmpTable1 = new int[tmpMap[1].Length];
+                for (int i = 0; i < tmpMap[0].Length; i++)
+                {
+                    tmpTable0[i] = VerticesFromGraphG[tmpMap[0][i]];
+                }
+                for (int i = 0; i < tmpMap[1].Length; i++)
+                {
+                    tmpTable1[i] = VerticesFromGraphH[tmpMap[1][i]];
+                }
+                BestMapping = new List<int[]>();
+                BestMapping.Add(tmpTable0);
+                BestMapping.Add(tmpTable1);
             }
+            else
+            {
+                FullIsomorphismChecker.AreTheyIsomorphic(createGraphH(VerticesFromGraphH), createGraph(VerticesFromGraphG), out tmpMap);
+                int[] tmpTable0 = new int[tmpMap[0].Length];
+                int[] tmpTable1 = new int[tmpMap[1].Length];
+                for (int i = 0; i < tmpMap[0].Length; i++)
+                {
+                    tmpTable0[i] = VerticesFromGraphH[tmpMap[0][i]];
+                }
+                for (int i = 0; i < tmpMap[1].Length; i++)
+                {
+                    tmpTable1[i] = VerticesFromGraphG[tmpMap[1][i]];
+                }
+                BestMapping = new List<int[]>();
+                BestMapping.Add(tmpTable0);
+                BestMapping.Add(tmpTable1);
+            }
+            
+
+            /*            int[] tmpTable0 = new int[tmpMap[0].Length];
+                        int[] tmpTable1 = new int[tmpMap[1].Length];
+                        for (int i = 0; i < tmpMap[0].Length; i++)
+                            tmpTable0[i] = tmpMap[0][i];
+                        for (int i = 0; i < tmpMap[1].Length; i++)
+                            tmpTable1[i] = tmpMap[1][i];
+                        BestMapping = new List<int[]>();
+                        BestMapping.Add(tmpTable0);
+                        BestMapping.Add(tmpTable1);*/
         }
 
         private void createGraphTwoVertices() //Uzupełnić typ
