@@ -122,6 +122,7 @@ namespace Isomorphism
                             }
                         }
                         searchSubGraph(verticesSubGraph, tmpCommonVertices, verti, tmpMapping);
+                        break;
                     }
                     else
                     {

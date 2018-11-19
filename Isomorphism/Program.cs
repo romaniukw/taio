@@ -13,8 +13,8 @@ namespace Isomorphism
             int[,] tab = new int[,] { { 0, 1 }, { 1, 0 } };
 
             Graph G, H;
-            G = CreateExampleGraphs.CreateFromFile("../../Data/example6a.txt");
-            H = CreateExampleGraphs.CreateFromFile("../../Data/example6b.txt");
+            G = CreateExampleGraphs.CreateFromFile("../../Data/example10a.txt");
+            H = CreateExampleGraphs.CreateFromFile("../../Data/example10b.txt");
 
             SearchSubGraph subGraph = new SearchSubGraph(G, H);
             /*if (G.Vertices.Length <= H.Vertices.Length)
