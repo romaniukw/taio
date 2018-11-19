@@ -13,6 +13,7 @@ namespace Isomorphism
         public Graph H { get; private set; }
         public List<int> VerticesFromGraphG { get; private set; } // Lista wierzchołków z pierwszego grafu
         public List<int> VerticesFromGraphH { get; private set; } // Lista wierzchołków z drugiego grafu
+        public List<int[]> BestMapping { get; private set; } // Mapowanie
 
         public SearchSubGraph(Graph g1, Graph g2)
         {
@@ -57,7 +58,7 @@ namespace Isomorphism
                         if (commonVertices.Count > 0)
                         {
                             Console.WriteLine("Zaczyna się " + i + " " + j);
-                            searchSubGraph(verticesSubGraph, commonVertices, verticesSubGraphH);
+                            searchSubGraph(verticesSubGraph, commonVertices, verticesSubGraphH, new List<int[]>());
                         }
                     }
                     commonVertices = new List<int>();
@@ -65,7 +66,7 @@ namespace Isomorphism
             }
         }
 
-        private void searchSubGraph(List<int> verticesSubGraph, List<int> commonVertices, List<int> verticesSubGraphH) // Uzupełnić typ
+        private void searchSubGraph(List<int> verticesSubGraph, List<int> commonVertices, List<int> verticesSubGraphH, List<int[]> tmpBestMapping) // Uzupełnić typ
         {
             List<int> tmpCommonVertices = new List<int>();
             Graph tmpGraph = createGraph(verticesSubGraph);
@@ -88,17 +89,19 @@ namespace Isomorphism
                 // Sprawdzanie izomorfizmu teraz
                 foreach (var verti in allSubGraphList)
                 {
-                    if (FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraphH(verti)))
+                    List<int[]> tmpMapping;
+                    if (FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraphH(verti), out tmpMapping))
                     {
                         foreach (var e in G.Vertices[tmpVertic].Neighbors)
                         {
-                            verticesSubGraph.Sort();
-                            if (e.Index > verticesSubGraph.Last() && !commonVertices.Contains(e.Index))
+                            //verticesSubGraph.Sort();
+                            //if (e.Index > verticesSubGraph.Last() && !commonVertices.Contains(e.Index))
+                            if (e.Index > verticesSubGraph.Max() && !commonVertices.Contains(e.Index))
                             {
                                 tmpCommonVertices.Add(e.Index);
                             }
                         }
-                        searchSubGraph(verticesSubGraph, tmpCommonVertices, verti);
+                        searchSubGraph(verticesSubGraph, tmpCommonVertices, verti, tmpMapping);
                     }
                     else
                     {
@@ -111,6 +114,14 @@ namespace Isomorphism
                             VerticesFromGraphH = new List<int>();
                             foreach (var p in verticesSubGraphH)
                                 VerticesFromGraphH.Add(p);
+                            BestMapping = new List<int[]>();
+                            foreach(var e in tmpBestMapping)
+                            {
+                                int[] tmpTable = new int[e.Length];
+                                for (int p = 0; p < e.Length; p++)
+                                    tmpTable[p] = e[p];
+                                BestMapping.Add(tmpTable);
+                            }
                         }
                     }
                     tmpCommonVertices = new List<int>();
@@ -122,7 +133,7 @@ namespace Isomorphism
                 tmpCommonVertices.Add(tmpVertic);
             }
             if (commonVertices.Count == 0)
-                if (VerticesFromGraphG.Count < tmpGraph.Vertices.Length)
+                if (VerticesFromGraphG.Count + createGraph(VerticesFromGraphG).Edges.Count < tmpGraph.Vertices.Length + tmpGraph.Edges.Count)
                 {
                     VerticesFromGraphG = new List<int>();
                     foreach (var p in verticesSubGraph)
@@ -130,6 +141,14 @@ namespace Isomorphism
                     VerticesFromGraphH = new List<int>();
                     foreach (var p in verticesSubGraphH)
                         VerticesFromGraphH.Add(p);
+                    BestMapping = new List<int[]>();
+                    foreach (var e in tmpBestMapping)
+                    {
+                        int[] tmpTable = new int[e.Length];
+                        for (int p = 0; p < e.Length; p++)
+                            tmpTable[p] = e[p];
+                        BestMapping.Add(tmpTable);
+                    }
                 }
         }
 
