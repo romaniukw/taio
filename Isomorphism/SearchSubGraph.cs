@@ -73,12 +73,12 @@ namespace Isomorphism
                 tmpCommonVertices.Add(e);
             //Rekurencyjne tworzenie wszystkich pod grafów
             List<List<int>> allSubGraphList = createAllSubGraphContainsNVertices(verticesSubGraph.Count + 1, new List<List<int>>(), 0, 0, new List<int>());
-            foreach (var p in verticesSubGraph)
+            /*foreach (var p in verticesSubGraph)
                 Console.Write(p + " ");
             Console.WriteLine();
             foreach (var p in commonVertices)
                 Console.Write(p + " ");
-            Console.WriteLine();
+            Console.WriteLine();*/
             for (int i = 0; i < commonVertices.Count; i++)
             {
                 var tmpVertic = commonVertices[i];
@@ -88,9 +88,9 @@ namespace Isomorphism
                 // Sprawdzanie izomorfizmu teraz
                 foreach (var verti in allSubGraphList)
                 {
-                    if (FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraph(verti)))
+                    if (FullIsomorphismChecker.AreTheyIsomorphic(createGraph(verticesSubGraph), createGraphH(verti)))
                     {
-                        foreach (var e in G.Vertices[i].Neighbors)
+                        foreach (var e in G.Vertices[tmpVertic].Neighbors)
                         {
                             verticesSubGraph.Sort();
                             if (e.Index > verticesSubGraph.Last() && !commonVertices.Contains(e.Index))
@@ -102,7 +102,7 @@ namespace Isomorphism
                     }
                     else
                     {
-                        if (VerticesFromGraphG.Count < tmpGraph.Vertices.Length)
+                        if (VerticesFromGraphG.Count + createGraph(VerticesFromGraphG).Edges.Count < tmpGraph.Vertices.Length + tmpGraph.Edges.Count)
                         {
                             VerticesFromGraphG = new List<int>();
                             foreach (var p in verticesSubGraph)
@@ -162,6 +162,27 @@ namespace Isomorphism
                 for (int j = i + 1; j < verticesSubGraph.Count; j++)
                 {
                     foreach (var e in G.Edges)
+                    {
+                        if (e.From == verticesSubGraph[i] && e.To == verticesSubGraph[j])
+                        {
+                            matrix[i, j] = 1;
+                            matrix[j, i] = 1;
+                            break;
+                        }
+                    }
+                }
+            }
+            return new Graph(matrix);
+        }
+        public Graph createGraphH(List<int> verticesSubGraph)
+        {
+            int[,] matrix = new int[verticesSubGraph.Count, verticesSubGraph.Count];
+            verticesSubGraph.Sort();
+            for (int i = 0; i < verticesSubGraph.Count - 1; i++)
+            {
+                for (int j = i + 1; j < verticesSubGraph.Count; j++)
+                {
+                    foreach (var e in H.Edges)
                     {
                         if (e.From == verticesSubGraph[i] && e.To == verticesSubGraph[j])
                         {
