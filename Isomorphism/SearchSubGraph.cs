@@ -17,11 +17,31 @@ namespace Isomorphism
 
         public SearchSubGraph(Graph g1, Graph g2)
         {
-            G = g1;
-            H = g2;
+            if (g1.Vertices.Length <= g2.Vertices.Length)
+            {
+                G = g1;
+                H = g2;
+            }
+            else
+            {
+                H = g1;
+                G = g2;
+            }
             VerticesFromGraphG = new List<int>();
             VerticesFromGraphH = new List<int>();
             createGraphTwoVertices();
+            if (g2.Vertices.Length < g1.Vertices.Length)
+            {
+                int[] tmpTable0 = new int[BestMapping[0].Length];
+                int[] tmpTable1 = new int[BestMapping[1].Length];
+                for (int i = 0; i < BestMapping[0].Length; i++)
+                    tmpTable0[i] = BestMapping[0][i];
+                for (int i = 0; i < BestMapping[1].Length; i++)
+                    tmpTable1[i] = BestMapping[1][i];
+                BestMapping = new List<int[]>();
+                BestMapping.Add(tmpTable0);
+                BestMapping.Add(tmpTable1);
+            }
         }
 
         private void createGraphTwoVertices() //Uzupełnić typ

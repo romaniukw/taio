@@ -16,11 +16,11 @@ namespace Isomorphism
             G = CreateExampleGraphs.CreateFromFile("../../Data/example6a.txt");
             H = CreateExampleGraphs.CreateFromFile("../../Data/example6b.txt");
 
-            SearchSubGraph subGraph;
-            if (G.Vertices.Length <= H.Vertices.Length)
+            SearchSubGraph subGraph = new SearchSubGraph(G, H);
+            /*if (G.Vertices.Length <= H.Vertices.Length)
                 subGraph = new SearchSubGraph(G, H);
             else
-                subGraph = new SearchSubGraph(H, G);
+                subGraph = new SearchSubGraph(H, G);*/
             foreach (var e in subGraph.VerticesFromGraphG)
                 Console.Write(e + " ");
             Console.WriteLine();
