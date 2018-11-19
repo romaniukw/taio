@@ -41,7 +41,8 @@ namespace Isomorphism
             Graph G = CreateExampleGraphs.CreateFromFile($"../../Data/example{index}a.txt");
             Graph H = CreateExampleGraphs.CreateFromFile($"../../Data/example{index}a.txt");
             sw.Start();
-            FullIsomorphismChecker.AreTheyIsomorphic(G, H);//tu sprawdzać całość
+            List<int[]> mapping;
+            FullIsomorphismChecker.AreTheyIsomorphic(G, H, out mapping);//tu sprawdzać całość
             sw.Stop();
             Console.Write($"{sw.ElapsedTicks}");
             Console.WriteLine();

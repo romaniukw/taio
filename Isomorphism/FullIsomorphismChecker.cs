@@ -9,8 +9,9 @@ namespace Isomorphism
 {
     public class FullIsomorphismChecker
     {
-        public static bool AreTheyIsomorphic(Graph G, Graph H)
+        public static bool AreTheyIsomorphic(Graph G, Graph H, out List<int[]> mapping)
         {
+            mapping = null;
             if(G.Vertices.Length != H.Vertices.Length)
             {
                 return false;
@@ -30,13 +31,14 @@ namespace Isomorphism
                 return false;
             }
 
-            return CheckIsomorphism(G, H);
+            return CheckIsomorphism(G, H, out mapping);
         }
 
         private static List<Vertex> gDegreesList;
 
-        private static bool CheckIsomorphism(Graph G, Graph H)
+        private static bool CheckIsomorphism(Graph G, Graph H, out List<int[]> mapping)
         {
+            mapping = null;
             gDegreesList = G.Vertices
                 .OrderByDescending(x => x.Degree)
                 .ToList();
@@ -46,10 +48,17 @@ namespace Isomorphism
                 .Select(x => x.ToList())
                 .OrderByDescending(x => x[0].Degree)
                 .ToList();
-
-            //Console.WriteLine(string.Join(", ", gDegreesList.Select(v => v.Index)));
-
-            return Perm(new List<Vertex>(), hDegreesList) != null;
+            
+            var gtab = gDegreesList.Select(x => x.Index).ToArray();
+            var htab = Perm(new List<Vertex>(), hDegreesList);
+            if(htab==null)
+            {                
+                return false;
+            }
+            mapping = new List<int[]>();
+            mapping.Add(gtab);
+            mapping.Add(htab.Select(x => x.Index).ToArray());
+            return true;
         }
 
         public static List<Vertex> Perm(List<Vertex> currentPerm, List<List<Vertex>> sequences, int currentSequenceIndex = 0)
