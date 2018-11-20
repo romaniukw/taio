@@ -30,18 +30,7 @@ namespace Isomorphism
             VerticesFromGraphG = new List<int>();
             VerticesFromGraphH = new List<int>();
             createGraphTwoVertices();
-            /*if (g2.Vertices.Length < g1.Vertices.Length)
-            {
-                int[] tmpTable0 = new int[BestMapping[0].Length];
-                int[] tmpTable1 = new int[BestMapping[1].Length];
-                for (int i = 0; i < BestMapping[0].Length; i++)
-                    tmpTable0[i] = BestMapping[0][i];
-                for (int i = 0; i < BestMapping[1].Length; i++)
-                    tmpTable1[i] = BestMapping[1][i];
-                BestMapping = new List<int[]>();
-                BestMapping.Add(tmpTable0);
-                BestMapping.Add(tmpTable1);
-            }*/
+
             List<int[]> tmpMap;
             if (g1.Vertices.Length <= g2.Vertices.Length)
             {
@@ -78,19 +67,9 @@ namespace Isomorphism
                 BestMapping.Add(tmpTable1);
             }
             
-
-            /*            int[] tmpTable0 = new int[tmpMap[0].Length];
-                        int[] tmpTable1 = new int[tmpMap[1].Length];
-                        for (int i = 0; i < tmpMap[0].Length; i++)
-                            tmpTable0[i] = tmpMap[0][i];
-                        for (int i = 0; i < tmpMap[1].Length; i++)
-                            tmpTable1[i] = tmpMap[1][i];
-                        BestMapping = new List<int[]>();
-                        BestMapping.Add(tmpTable0);
-                        BestMapping.Add(tmpTable1);*/
         }
 
-        private void createGraphTwoVertices() //Uzupełnić typ
+        private void createGraphTwoVertices() 
         {
             List<int> verticesSubGraphH = new List<int>();
             verticesSubGraphH.Add(H.Edges[0].From);
@@ -123,7 +102,6 @@ namespace Isomorphism
                         }
                         if (commonVertices.Count > 0)
                         {
-                            Console.WriteLine("Zaczyna się " + i + " " + j);
                             searchSubGraph(verticesSubGraph, commonVertices, verticesSubGraphH, new List<int[]>());
                         }
                     }
@@ -132,7 +110,7 @@ namespace Isomorphism
             }
         }
 
-        private void searchSubGraph(List<int> verticesSubGraph, List<int> commonVertices, List<int> verticesSubGraphH, List<int[]> tmpBestMapping) // Uzupełnić typ
+        private void searchSubGraph(List<int> verticesSubGraph, List<int> commonVertices, List<int> verticesSubGraphH, List<int[]> tmpBestMapping)
         {
             List<int> tmpCommonVertices = new List<int>();
             Graph tmpGraph = createGraph(verticesSubGraph);
@@ -140,19 +118,12 @@ namespace Isomorphism
                 tmpCommonVertices.Add(e);
             //Rekurencyjne tworzenie wszystkich pod grafów
             List<List<int>> allSubGraphList = createAllSubGraphContainsNVertices(verticesSubGraph.Count + 1, new List<List<int>>(), 0, 0, new List<int>());
-            /*foreach (var p in verticesSubGraph)
-                Console.Write(p + " ");
-            Console.WriteLine();
-            foreach (var p in commonVertices)
-                Console.Write(p + " ");
-            Console.WriteLine();*/
             for (int i = 0; i < commonVertices.Count; i++)
             {
                 var tmpVertic = commonVertices[i];
                 verticesSubGraph.Add(tmpVertic);
                 tmpCommonVertices.Remove(tmpVertic);
 
-                // Sprawdzanie izomorfizmu teraz
                 foreach (var verti in allSubGraphList)
                 {
                     List<int[]> tmpMapping;
@@ -160,8 +131,6 @@ namespace Isomorphism
                     {
                         foreach (var e in G.Vertices[tmpVertic].Neighbors)
                         {
-                            //verticesSubGraph.Sort();
-                            //if (e.Index > verticesSubGraph.Last() && !commonVertices.Contains(e.Index))
                             if (e.Index > verticesSubGraph.Max() && !commonVertices.Contains(e.Index))
                             {
                                 tmpCommonVertices.Add(e.Index);

@@ -47,7 +47,7 @@ namespace Isomorphism
             {
                 sw.Start();
                 SearchSubGraph subGraph = new SearchSubGraph(G, H);
-               var map = subGraph.BestMapping;
+                var map = subGraph.BestMapping;
                 sw.Stop();
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Algorytm dokładny: ");

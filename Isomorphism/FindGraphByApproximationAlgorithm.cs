@@ -37,7 +37,7 @@ namespace Isomorphism
             if (G.Vertices.Length==0 || H.Vertices.Length == 0)
             {
                 result = new List<int[]>() { new int[0], new int[0] };
-                return true; //graf G lub H jest grafem pustym
+                return true;
             }
 
             if(G.Edges.Count==0 || H.Edges.Count==0)
