@@ -17,6 +17,22 @@ namespace Isomorphism
 
         public SearchSubGraph(Graph g1, Graph g2)
         {
+            if(g1.Edges.Count==0 || g2.Edges.Count==0)
+            {
+                BestMapping = new List<int[]>();
+                BestMapping.Add(new int[] { g1.Vertices[0].Index });
+                BestMapping.Add(new int[] { g2.Vertices[0].Index });
+                return;
+
+            }
+            if (g1.Edges.Count == 1 || g2.Edges.Count == 1)
+            {
+                BestMapping = new List<int[]>();
+                BestMapping.Add(new int[] { g1.Edges[0].From, g1.Edges[0].To });
+                BestMapping.Add(new int[] { g2.Edges[0].From, g2.Edges[0].To });
+
+            }
+
             if (g1.Vertices.Length <= g2.Vertices.Length)
             {
                 G = g1;

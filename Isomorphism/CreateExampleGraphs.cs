@@ -29,7 +29,7 @@ namespace Isomorphism
         {
             StreamReader sr = new StreamReader(path);
             var s = sr.ReadToEnd();
-            var tab = s.Split(new[] { "\r\n" }, StringSplitOptions.None).ToList();
+            var tab = s.Split(new[] { "\r\n","\n" }, StringSplitOptions.None).ToList();
             tab.RemoveAt(tab.Count()-1);
             var gtab=tab.Select(x => x.Split(',')).Select(x => Array.ConvertAll(x, int.Parse)).ToArray();
 
