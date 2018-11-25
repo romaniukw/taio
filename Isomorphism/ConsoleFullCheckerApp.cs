@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Isomorphism
 {
@@ -37,7 +39,62 @@ namespace Isomorphism
             }
             RunApp();
         }
+
+        private static void GetPictureWithGraphs(Graph G, Graph H, List<int[]> mapp, string name)
+        {
+            Bitmap bmp = new Bitmap(1200, 600);
+            for(int i=0; i<bmp.Width; i++)
+            {
+                for(int j=0; j < bmp.Height; j++)
+                {
+                    bmp.SetPixel(i, j, Color.AliceBlue);
+                }
+            }
+            Graphics g = Graphics.FromImage(bmp);
+            
+            Point sg = new Point(300, 300);
+            Point sh = new Point(900, 300);
+            int r = 250;
+
+            DrawOneGraph(G, sg, r, mapp[0], g);
+            DrawOneGraph(H, sh, r, mapp[1], g);
+            bmp.Save($"{name}.png", ImageFormat.Png);
+        }
    
+        public static void DrawOneGraph(Graph G, Point sg, int r, int[] mapping, Graphics g)
+        {
+            Point[] gvert = new Point[G.Vertices.Length];
+            Pen black = new Pen(Brushes.Black, 1);
+            Pen red = new Pen(Brushes.Red, 2);
+            for (int i = 1; i<=G.Vertices.Length; i++)
+            {
+                double angle = i * (360 / G.Vertices.Length);
+                float x = (float)(sg.X + r * Math.Sin(Math.PI * angle / 180.0));
+                float y = (float)(sg.Y + r * Math.Cos(Math.PI * angle / 180.0));
+                g.DrawString($"{i-1}", new Font("Arial", 13), Brushes.Black,x,y);
+                if(mapping.Contains(G.Vertices[i-1].Index))
+                {
+                    g.FillEllipse(Brushes.Red, x - 2, y - 2, 4, 4);
+                }
+                else
+                {
+                    g.FillEllipse(Brushes.Black, x - 2, y - 2, 4, 4);
+                }
+                gvert[G.Vertices[i-1].Index] = new Point((int)x,(int) y);
+            }
+
+            foreach(var e in G.Edges)
+            {
+                if(mapping.Contains(e.From)&& mapping.Contains(e.To))
+                {
+                    g.DrawLine(red, gvert[e.From], gvert[e.To]);
+                }
+                else
+                {
+                    g.DrawLine(black, gvert[e.From], gvert[e.To]);
+                }
+            }
+        }
         public static void RunWithFile(int i)
         {
             Graph G = GetGraph("G");
@@ -52,7 +109,8 @@ namespace Isomorphism
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Algorytm dokładny: ");
                 ShowMapping(map, sw.ElapsedTicks);
-
+                GetPictureWithGraphs(G, H, map, "dokladny");
+                Console.WriteLine("Sprawdź wizualizację w pliku 'dokladny.png' ");
             }
             sw.Reset();
             if(i==2 ||i==3)
@@ -60,9 +118,16 @@ namespace Isomorphism
                 sw.Start();
                 var map = FindGraphByApproximationAlgorithm.Search(G, H);
                 sw.Stop();
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine("Algorytm aproksymacyjny: ");
                 ShowMapping(map, sw.ElapsedTicks);
-            }
+                if(G.Vertices.Length<20 && H.Vertices.Length<20)
+                {
+                    GetPictureWithGraphs(G, H, map, "aproksymacyjny");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine("Sprawdź wizualizację w pliku 'aproksymacyjny.png' ");
+                }
+            }        
         }
 
         public static void ShowMapping(List<int[]> mapp, long Ticks)
