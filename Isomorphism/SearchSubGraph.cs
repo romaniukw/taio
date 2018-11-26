@@ -30,6 +30,7 @@ namespace Isomorphism
                 BestMapping = new List<int[]>();
                 BestMapping.Add(new int[] { g1.Edges[0].From, g1.Edges[0].To });
                 BestMapping.Add(new int[] { g2.Edges[0].From, g2.Edges[0].To });
+                return;
 
             }
 
